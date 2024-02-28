@@ -8,12 +8,14 @@ ENV TZ="Asia/Ho_Chi_Minh"
 RUN apk add --update --no-cache autoconf g++ make openssl-dev
 RUN apk add libpng-dev
 RUN apk add libzip-dev
+RUN apk add libpq-dev
 RUN apk add --update linux-headers
 
 RUN docker-php-ext-install gd
 RUN docker-php-ext-install zip
 RUN docker-php-ext-install bcmath
 RUN docker-php-ext-install sockets
+RUN docker-php-ext-install pdo pdo_pgsql
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 ### End Init install
 
@@ -25,7 +27,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 # RUN pecl install mongodb
 # RUN docker-php-ext-enable mongodb
 
-RUN docker-php-ext-install mysqli pdo pdo_mysql && docker-php-ext-enable pdo_mysql
+#RUN docker-php-ext-install mysqli pdo pdo_mysql && docker-php-ext-enable pdo_mysql
+RUN docker-php-ext-enable pdo_pgsql
 
 #install xdebug
 # RUN pecl install xdebug && docker-php-ext-enable xdebug

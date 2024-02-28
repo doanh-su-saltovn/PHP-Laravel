@@ -20,28 +20,41 @@ services:
     volumes:
       - ./laravel-app:/var/www/html
 
-  mysql:
-    image: mysql:latest
+  postgres:
+    image: postgres:latest
     restart: always
+    container_name: postgres
     volumes:
-      - mysql-volumes:/var/lib/mysql
+        - "postgres-volumes:/var/lib/postgresql/data"
     environment:
-      MYSQL_DATABASE: laravel_app
-      MYSQL_USER: mysqladmin
-      MYSQL_PASSWORD: mysqladmin
-      MYSQL_ROOT_PASSWORD: root
+      - POSTGRES_DB: laravel_app
+      - POSTGRES_USER: root
+      - POSTGRES_PASSWORD: root
     ports:
-      - "3306:3306"
+      - "5432:5432"
 
-  phpmyadmin:
-    image: phpmyadmin:latest
-    ports:
-      - "8081:80"
-    environment:
-      - PMA_ARBITRARY=1
-  
+  # mysql:
+  #   image: mysql:latest
+  #   restart: always
+  #   volumes:
+  #     - mysql-volumes:/var/lib/mysql
+  #   environment:
+  #     MYSQL_DATABASE: laravel_app
+  #     MYSQL_USER: mysqladmin
+  #     MYSQL_PASSWORD: mysqladmin
+  #     MYSQL_ROOT_PASSWORD: root
+  #   ports:
+  #     - "3306:3306"
+
+  # phpmyadmin:
+  #   image: phpmyadmin:latest
+  #   ports:
+  #     - "8081:80"
+  #   environment:
+  #     - PMA_ARBITRARY=1
+
 volumes:
-  mysql-volumes:
+  postgres-volumes:
 
 networks:
   default:

@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  laravel-app:
+    container_name: laravel-app
+    build:
+      context: ./docker/php
+    volumes:
+      - ./laravel-app:/var/www/html
+    working_dir: /var/www/html
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./docker/nginx
+    ports:
+      - "8082:80"
+    depends_on:
+      - laravel-app
+    volumes:
+      - ./laravel-app:/var/www/html
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    volumes:
+      - mysql-volumes:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: laravel_app
+      MYSQL_USER: mysqladmin
+      MYSQL_PASSWORD: mysqladmin
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    ports:
+      - "8081:80"
+    environment:
+      - PMA_ARBITRARY=1
+  
+volumes:
+  mysql-volumes:
+
+networks:
+  default:
+    name: laravel-app-network
